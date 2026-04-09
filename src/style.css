@@ -1,0 +1,225 @@
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0d1722;
+  color: #eff3e8;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at top, rgba(69, 112, 144, 0.2), transparent 45%),
+    linear-gradient(180deg, #132230 0%, #0d1722 100%);
+}
+
+.hud {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.hud-card {
+  min-width: 210px;
+  padding: 11px 13px;
+  border: 1px solid rgba(239, 243, 232, 0.18);
+  border-radius: 12px;
+  background: rgba(8, 14, 21, 0.78);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.hud-title {
+  margin-bottom: 7px;
+  color: #ffdd8f;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.hud-status {
+  margin-bottom: 8px;
+  color: #9dd3ff;
+}
+
+.toolbar {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.toolbar-card {
+  width: 280px;
+  padding: 12px;
+  border: 1px solid rgba(239, 243, 232, 0.18);
+  border-radius: 14px;
+  background: rgba(8, 14, 21, 0.84);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+}
+
+.toolbar-title {
+  margin-bottom: 10px;
+  color: #9dd3ff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.toolbar-row,
+.toolbar-grid {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.toolbar-row {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.toolbar-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.toolbar-grid-single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.toolbar button {
+  min-height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #eff3e8;
+  font: inherit;
+  cursor: pointer;
+}
+
+.toolbar button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.11);
+}
+
+.toolbar button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.toolbar button.is-active {
+  border-color: rgba(255, 221, 143, 0.72);
+  background: rgba(255, 221, 143, 0.18);
+  color: #ffdd8f;
+}
+
+.toolbar button.toolbar-upload {
+  border-color: rgba(157, 211, 255, 0.4);
+  background: rgba(157, 211, 255, 0.12);
+  color: #9dd3ff;
+}
+
+.toolbar button.toolbar-upload:hover:not(:disabled) {
+  background: rgba(157, 211, 255, 0.2);
+}
+
+.toolbar-hint {
+  margin-top: 4px;
+  color: rgba(239, 243, 232, 0.8);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.light-panel {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.light-card {
+  width: 280px;
+  max-height: calc(100vh - 180px);
+  overflow: auto;
+  padding: 12px;
+  border: 1px solid rgba(239, 243, 232, 0.18);
+  border-radius: 14px;
+  background: rgba(8, 14, 21, 0.84);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+}
+
+.light-title {
+  margin-bottom: 10px;
+  color: #ffdd8f;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.light-toggle,
+.light-control {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+  color: #eff3e8;
+  font-size: 12px;
+}
+
+.light-toggle {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.light-control-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.light-value {
+  color: #9dd3ff;
+  font-variant-numeric: tabular-nums;
+}
+
+.light-slider {
+  width: 100%;
+  accent-color: #ffdd8f;
+}
+
+.light-actions {
+  display: grid;
+  margin-top: 8px;
+}
+
+.light-actions button {
+  min-height: 36px;
+  border: 1px solid rgba(157, 211, 255, 0.4);
+  border-radius: 10px;
+  background: rgba(157, 211, 255, 0.12);
+  color: #9dd3ff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.light-actions button:hover {
+  background: rgba(157, 211, 255, 0.2);
+}
+
+.light-hint {
+  margin-top: 10px;
+  color: rgba(239, 243, 232, 0.76);
+  font-size: 11px;
+  line-height: 1.35;
+}
