@@ -41,7 +41,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     id: "teapot",
     label: "Utah Teapot",
     source: "obj",
-    url: "${import.meta.env.BASE_URL}models/teapot.obj!",
+    url: `${import.meta.env.BASE_URL}models/teapot.obj`,
     bounds: {
       kind: "box",
       center: [0.217, 1.575, 0],
@@ -53,7 +53,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     id: "beacon",
     label: "KAUST Beacon",
     source: "obj",
-    url: "${import.meta.env.BASE_URL}models/teapot.obj",
+    url: `${import.meta.env.BASE_URL}models/KAUST_Beacon.obj`,
     bounds: {
       kind: "sphere",
       center: [125, 125, 125],
