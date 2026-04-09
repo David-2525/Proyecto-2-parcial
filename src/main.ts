@@ -85,10 +85,10 @@ const textureCache = new Map<string, TextureData>();
 const sceneObjects: SceneObject[] = [];
 
 const TEXTURE_PRESETS: TexturePreset[] = [
-  { id: "tex1", label: "Texture 1", key: "H", url: "/textures/tex1.png" },
-  { id: "tex2", label: "Texture 2", key: "J", url: "/textures/tex2.jpg" },
-  { id: "tex3", label: "Texture 3", key: "K", url: "/textures/tex3.jpg" },
-  { id: "tex4", label: "Texture 4", key: "L", url: "/textures/tex4.jpg" },
+  { id: "tex1", label: "Texture 1", key: "H", url: `${import.meta.env.BASE_URL}textures/tex1.png` },
+  { id: "tex2", label: "Texture 2", key: "J", url: `${import.meta.env.BASE_URL}textures/tex2.jpg` },
+  { id: "tex3", label: "Texture 3", key: "K", url: `${import.meta.env.BASE_URL}textures/tex3.jpg` },
+  { id: "tex4", label: "Texture 4", key: "L", url: `${import.meta.env.BASE_URL}textures/tex4.jpg` },
 ];
 
 const DEFAULT_LIGHT: LightSettings = {
