@@ -926,8 +926,7 @@ function renderScene() {
       state.shading === "wireframe" ? [246, 244, 237] : [18, 26, 37],
     resolutionScale: quality.scale,
     maxPixels: quality.maxPixels,
-    // ── MEJORA: shadow map de mayor resolución ──────────────────────────
-    shadowMapSize: state.interactive ? 512 : 1024,
+    shadowMapSize: state.interactive ? 256 : 512,
     selectedObjectId: state.selectedId,
   });
 
@@ -1112,17 +1111,28 @@ function computeSceneExtent(target: Vec3) {
   return extent;
 }
 
-// ── MEJORA PRINCIPAL: resolución y píxeles máximos aumentados ──────────────
 function getQualitySettings(totalTriangles: number) {
   if (state.interactive) {
-    if (totalTriangles > 50_000) return { scale: 0.5,  maxPixels: 200_000 };
-    if (totalTriangles > 12_000) return { scale: 0.65, maxPixels: 300_000 };
-    return { scale: 0.85, maxPixels: 500_000 };
+    if (totalTriangles > 50_000) {
+      return { scale: 0.24, maxPixels: 75_000 };
+    }
+
+    if (totalTriangles > 12_000) {
+      return { scale: 0.34, maxPixels: 100_000 };
+    }
+
+    return { scale: 0.5, maxPixels: 170_000 };
   }
 
-  if (totalTriangles > 50_000) return { scale: 0.7,  maxPixels: 400_000 };
-  if (totalTriangles > 12_000) return { scale: 0.85, maxPixels: 600_000 };
-  return { scale: 1.0,  maxPixels: 1_000_000 };
+  if (totalTriangles > 50_000) {
+    return { scale: 0.34, maxPixels: 125_000 };
+  }
+
+  if (totalTriangles > 12_000) {
+    return { scale: 0.54, maxPixels: 200_000 };
+  }
+
+  return { scale: 0.82, maxPixels: 360_000 };
 }
 
 function updateHud(stats?: RenderStats) {
@@ -1219,6 +1229,7 @@ function renderToolbar() {
       <div class="toolbar-hint">
         Current texture: ${textureLabel}
       </div>
+      
     </div>
   `;
 }
