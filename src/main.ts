@@ -92,14 +92,14 @@ const TEXTURE_PRESETS: TexturePreset[] = [
 ];
 
 const DEFAULT_LIGHT: LightSettings = {
-  position: [2.6, 3.4, 2.2],
-  ambient: 0.18,
-  diffuse: 0.88,
-  specular: 0.4,
-  specularPower: 36,
+  position: [3.0, 4.0, 3.0],
+  ambient: 0.25,
+  diffuse: 1.0,
+  specular: 0.6,
+  specularPower: 48,
   shadowEnabled: true,
-  shadowStrength: 0.65,
-  shadowBias: 0.005,
+  shadowStrength: 0.5,
+  shadowBias: 0.003,
 };
 
 const state = {
@@ -237,6 +237,7 @@ appCanvas.addEventListener("pointerdown", handlePointerDown);
 window.addEventListener("pointermove", handlePointerMove);
 window.addEventListener("pointerup", handlePointerUp);
 window.addEventListener("pointercancel", handlePointerCancel);
+
 appCanvas.addEventListener("dragover", (event) => {
   event.preventDefault();
 
@@ -244,6 +245,7 @@ appCanvas.addEventListener("dragover", (event) => {
     event.dataTransfer.dropEffect = "copy";
   }
 });
+
 appCanvas.addEventListener("drop", (event) => {
   event.preventDefault();
   const file = getFirstUploadedFile(event.dataTransfer?.files ?? null);
@@ -285,9 +287,11 @@ toolbar.addEventListener("click", (event) => {
 
   void handleToolbarAction(button.dataset.action ?? "");
 });
+
 lightPanel.addEventListener("input", handleLightPanelInput);
 lightPanel.addEventListener("change", handleLightPanelChange);
 lightPanel.addEventListener("click", handleLightPanelClick);
+
 fileInput.addEventListener("change", () => {
   const file = getFirstUploadedFile(fileInput.files);
   fileInput.value = "";
@@ -593,10 +597,12 @@ async function importUploadedObject(file: File) {
 }
 
 function createUploadedAssetId(fileName: string) {
-  const slug = stripFileExtension(fileName)
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "") || "mesh";
+  const slug =
+    stripFileExtension(fileName)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "mesh";
+
   const assetId = `upload-${nextUploadedAssetId}-${slug}`;
   nextUploadedAssetId += 1;
   return assetId;
@@ -910,6 +916,12 @@ function renderScene() {
   const totalTriangles = renderObjects.reduce((sum, entry) => sum + entry.mesh.triangleCount, 0);
   const quality = getQualitySettings(totalTriangles);
 
+  const renderLight: LightSettings = {
+    ...state.light,
+    position: [...state.light.position],
+    shadowEnabled: state.interactive ? false : state.light.shadowEnabled,
+  };
+
   const stats = renderer.render({
     objects: renderObjects,
     viewMatrix: camera.viewMatrix,
@@ -919,14 +931,14 @@ function renderScene() {
     far: camera.far,
     texture,
     shading: state.shading,
-    light: state.light,
+    light: renderLight,
     shadowCenter: focus.target,
     shadowRadius: Math.max(2, focus.sceneRadius),
     clearColor:
       state.shading === "wireframe" ? [246, 244, 237] : [18, 26, 37],
     resolutionScale: quality.scale,
     maxPixels: quality.maxPixels,
-    shadowMapSize: state.interactive ? 256 : 512,
+    shadowMapSize: state.interactive ? 256 : 1024,
     selectedObjectId: state.selectedId,
   });
 
@@ -1113,26 +1125,26 @@ function computeSceneExtent(target: Vec3) {
 
 function getQualitySettings(totalTriangles: number) {
   if (state.interactive) {
-    if (totalTriangles > 50_000) {
-      return { scale: 0.24, maxPixels: 75_000 };
+    if (totalTriangles > 50000) {
+      return { scale: 0.32, maxPixels: 130000 };
     }
 
-    if (totalTriangles > 12_000) {
-      return { scale: 0.34, maxPixels: 100_000 };
+    if (totalTriangles > 12000) {
+      return { scale: 0.48, maxPixels: 220000 };
     }
 
-    return { scale: 0.5, maxPixels: 170_000 };
+    return { scale: 0.72, maxPixels: 380000 };
   }
 
-  if (totalTriangles > 50_000) {
-    return { scale: 0.34, maxPixels: 125_000 };
+  if (totalTriangles > 50000) {
+    return { scale: 0.62, maxPixels: 420000 };
   }
 
-  if (totalTriangles > 12_000) {
-    return { scale: 0.54, maxPixels: 200_000 };
+  if (totalTriangles > 12000) {
+    return { scale: 0.85, maxPixels: 720000 };
   }
 
-  return { scale: 0.82, maxPixels: 360_000 };
+  return { scale: 1.15, maxPixels: 1200000 };
 }
 
 function updateHud(stats?: RenderStats) {
@@ -1229,7 +1241,6 @@ function renderToolbar() {
       <div class="toolbar-hint">
         Current texture: ${textureLabel}
       </div>
-      
     </div>
   `;
 }
@@ -1331,7 +1342,7 @@ function endInteractiveRenderSoon() {
     state.interactive = false;
     scheduleRender();
     updateHud();
-  }, 110);
+  }, 140);
 }
 
 function getPreset(assetId: string) {
@@ -1390,6 +1401,7 @@ function getPointerRay(clientX: number, clientY: number, camera: ReturnType<type
   const normalizedY = 1 - ((clientY - rect.top) / rect.height) * 2;
   const tanHalfY = Math.tan(camera.fovY * 0.5);
   const tanHalfX = tanHalfY * camera.aspect;
+
   const direction = vec3.normalize(
     vec3.add(
       camera.forward,
@@ -1478,7 +1490,7 @@ function createCubeMesh() {
   );
 }
 
-function createSphereMesh(latitudeSegments = 18, longitudeSegments = 24) {
+function createSphereMesh(latitudeSegments = 20, longitudeSegments = 28) {
   const positions: number[] = [];
   const indices: number[] = [];
 
